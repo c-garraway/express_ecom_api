@@ -57,22 +57,22 @@ app.get('/', (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-    const { firstname, surname, email, password } = req.body
+    const { first_name, last_name, email_address, password } = req.body
 
     if (
-        firstname == null ||
-        surname == null ||
-        email == null ||
+        first_name == null ||
+        last_name == null ||
+        email_address == null ||
         password == null
     ) {
         return res.sendStatus(403)
     }
 
     try {
-        const hashedPassword = bcrypt.hashSync(req.body.password, 10)
+        const hashedPassword = bcrypt.hash(req.body.password, 10)
         const data = await pool.query(
-            'INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING *',
-            [firstname, surname, email, hashedPassword]
+            'INSERT INTO users (first_name, last_name, email_address, password) VALUES ($1, $2, $3, $4) RETURNING *',
+            [first_name, last_name, email_address, hashedPassword]
         )
 
         if (data.rows.length === 0) {
@@ -82,9 +82,9 @@ app.post('/register', async (req, res) => {
 
         req.session.user = {
             id: user.id,
-            firstname: user.firstname,
-            surname: user.surname,
-            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email_address: user.email_address,
         }
 
         res.status(200)
@@ -96,16 +96,16 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body
+    const { email_address, password } = req.body
 
-    if (email == null || password == null) {
+    if (email_address == null || password == null) {
         return res.sendStatus(403)
     }
 
     try {
         const data = await pool.query(
-            'SELECT id, firstname, surname, email, password FROM users WHERE email = $1',
-            [email]
+            'SELECT * FROM users WHERE email_address = $1',
+            [email_address]
         )
 
         if (data.rows.length === 0) {
@@ -120,9 +120,9 @@ app.post('/login', async (req, res) => {
 
         req.session.user = {
             id: user.id,
-            firstname: user.firstname,
-            surname: user.surname,
-            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email_address: user.email_address,
         }
 
         res.status(200)
