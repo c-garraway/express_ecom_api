@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt')
 
 // express app init and config
 const app = express()
-
+app.use(morgan('short'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
@@ -20,7 +20,7 @@ app.use(
 )
 
 // pg init and config
-const { Client } = require('pg')
+const Pool = require('pg').Pool
 const conObject = {
     user: process.env.USER,
     host: process.env.HOST,
@@ -29,14 +29,14 @@ const conObject = {
     port: process.env.PORT,
 }
 
-const client = new Client(conObject)
-client.connect()
+const pool = new Pool(conObject)
+pool.connect()
 
 // session store and session config
 const store = new (require('connect-pg-simple')(session))({
     conObject,
 })
-app.use(morgan('short'))
+
 app.use(
     session({
         store: store,
@@ -52,6 +52,10 @@ app.use(
     })
 )
 
+app.get('/', (req, res) => {
+    res.status(200).send('Are you out there?')
+})
+
 app.post('/register', async (req, res) => {
     const { firstname, surname, email, password } = req.body
 
@@ -66,7 +70,7 @@ app.post('/register', async (req, res) => {
 
     try {
         const hashedPassword = bcrypt.hashSync(req.body.password, 10)
-        const data = await client.query(
+        const data = await pool.query(
             'INSERT INTO users (firstname, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING *',
             [firstname, surname, email, hashedPassword]
         )
@@ -99,7 +103,7 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const data = await client.query(
+        const data = await pool.query(
             'SELECT id, firstname, surname, email, password FROM users WHERE email = $1',
             [email]
         )
