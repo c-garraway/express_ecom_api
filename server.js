@@ -1,7 +1,7 @@
 require('dotenv').config()
 const morgan = require('morgan')
 const express = require('express')
-const cors = require('cors')
+const { ensureAuthentication } = require('./utilities')
 const session = require('express-session')
 
 // express app init and config
@@ -9,13 +9,6 @@ const app = express()
 app.use(morgan('short'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(
-    cors({
-        origin: 'http://localhost:3001',
-        methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-        credentials: true,
-    })
-)
 
 // pg init and config
 const Pool = require('pg').Pool
@@ -57,13 +50,7 @@ const orders = require('./middleware/orders')
 const orderitems = require('./middleware/orderitems')
 const users = require('./middleware/users')
 
-function ensureAuthentication(req, res, next) {
-    if (req.session.authenticated) {
-        return next();
-    } else {
-        res.status(403).json({ msg: "You're not authorized to view this page" });
-    }
-}
+
 
 app.get('/', (req, res) => {
     res.status(200).send('Are you out there?') //DEV

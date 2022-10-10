@@ -1,6 +1,7 @@
 const db = require('../config/database')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
+const { timestamp } = require('../utilities')
 
 //TODO: Check for existing email in db
 const registerUser = async (req, res) => {
@@ -17,9 +18,10 @@ const registerUser = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const created_at = timestamp
         const data = await db.pool.query(
-            'INSERT INTO users (first_name, last_name, email_address, password) VALUES ($1, $2, $3, $4) RETURNING *',
-            [first_name, last_name, email_address, hashedPassword]
+            'INSERT INTO users (first_name, last_name, email_address, password, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [first_name, last_name, email_address, hashedPassword, created_at]
         )
 
         if (data.rows.length === 0) {
@@ -33,6 +35,7 @@ const registerUser = async (req, res) => {
             first_name: user.first_name,
             last_name: user.last_name,
             email_address: user.email_address,
+            created_at: user.created_at
         }
 
         res.status(200)
@@ -72,6 +75,7 @@ const loginUser =  async (req, res) => {
             first_name: user.first_name,
             last_name: user.last_name,
             email_address: user.email_address,
+            created_at: user.created_at
         }
 
         res.status(200)
