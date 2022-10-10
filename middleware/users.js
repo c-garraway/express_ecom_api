@@ -1,4 +1,4 @@
-const db = require('../config/database')
+const { pool } = require('../config/database')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const { timestamp } = require('../utilities')
@@ -19,7 +19,7 @@ const registerUser = async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const created_at = timestamp
-        const data = await db.pool.query(
+        const data = await pool.query(
             'INSERT INTO users (first_name, last_name, email_address, password, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             [first_name, last_name, email_address, hashedPassword, created_at]
         )
@@ -54,7 +54,7 @@ const loginUser =  async (req, res) => {
     }
 
     try {
-        const data = await db.pool.query(
+        const data = await pool.query(
             'SELECT * FROM users WHERE email_address = $1',
             [email_address]
         )
