@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const { timestamp } = require('../utilities')
 
-//TODO: Check for existing email in db
 const registerUser = async (req, res) => {
     const { first_name, last_name, email_address, password } = req.body
 
@@ -17,7 +16,8 @@ const registerUser = async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(req.body.password, salt)
         const created_at = timestamp
         const data = await pool.query(
             'INSERT INTO users (first_name, last_name, email_address, password, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
@@ -41,8 +41,8 @@ const registerUser = async (req, res) => {
         res.status(200)
         return res.json({ user: req.session.user })
     } catch (e) {
-        console.error(e)
-        return res.sendStatus(403)
+        
+        return res.status(403).send({message: e.detail})
     }
 }
 
