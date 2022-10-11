@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
         email_address == null ||
         password == null
     ) {
-        return res.sendStatus(403)
+        return res.status(400).send({message: "Bad request"})
     }
 
     try {
@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
         )
 
         if (data.rows.length === 0) {
-            res.sendStatus(403)
+            return res.status(400).send({message: "Bad request"})
         }
         const user = data.rows[0]
         req.session.authenticated = true
@@ -50,7 +50,7 @@ const loginUser =  async (req, res) => {
     const { email_address, password } = req.body
 
     if (email_address == null || password == null) {
-        return res.sendStatus(403)
+        return res.status(401).send({message: "Invalid credentials"})
     }
 
     try {
@@ -60,13 +60,13 @@ const loginUser =  async (req, res) => {
         )
 
         if (data.rows.length === 0) {
-            return res.sendStatus(403)
+            return res.status(401).send({message: "Invalid credentials"})
         }
         const user = data.rows[0]
 
         const matches = await bcrypt.compareSync(password, user.password)
         if (!matches) {
-            return res.sendStatus(403)
+            return res.status(401).send({message: "Invalid credentials"})
         }
         req.session.authenticated = true
         req.session.userCartSession_id = uuid.v4()
@@ -82,17 +82,17 @@ const loginUser =  async (req, res) => {
         return res.json({ user: req.session.user })
     } catch (e) {
         console.error(e)
-        return res.sendStatus(403)
+        return res.status(400).send({message: "Bad request"})
     }
 }
 
 const logoutUser = async (req, res) => {
     try {
         await req.session.destroy()
-        return res.sendStatus(200)
+        return res.status(200).send({message: "logged out"})
     } catch (e) {
         console.error(e)
-        return res.sendStatus(500)
+        return res.status(500).send({message: "Internal Server Error"})
     }
 }
 
@@ -101,7 +101,7 @@ const fetchUser = async (req, res) => {
         res.status(200)
         return res.json({ user: req.session.user })
     }
-    return res.sendStatus(403)
+    return res.status(500).send({message: "Internal Server Error"})
 }
 
 module.exports = {

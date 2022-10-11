@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: Ecom Order API
+  version: 1.0.0
+  description: Ecom API portfolio project
+paths:
+  /users/login:
+    summary: User login path
+    description: This path is used to log the user into the application
+    post:
+      summary: User login
+      description: Log user into application session
+      operationId: login
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: Sample valid response body
+          content:
+            application/json:
+              examples:
+                login:
+                  value: |-
+                    {
+                      "user": {
+                        "id": 19,
+                        "first_name": "Tony",
+                        "last_name": "Balony",
+                        "email_address": "tonyb@email.com",
+                        "created_at": "2022-10-11T15:49:42.000Z"
+                      }
+                    }
+        '400':
+          description: Sample bad request response body
+          content:
+            application/json:
+              examples:
+                General request error:
+                  value:
+                    message: Bad request
+        '401':
+          description: Sample invalid credentials response body
+          content:
+            application/json:
+              examples:
+                Invalid credentials:
+                  value: |-
+                    {
+                      "message": "Invalid credentials"
+                    }
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+  /users/logout:
+    summary: User logout path
+    description: This path is used to log the user out of applicaion
+    post:
+      summary: User logout
+      description: This path logs the user out of active session
+      operationId: logout
+      responses:
+        '200':
+          description: Successful logout response body
+          content:
+            application/json:
+              examples:
+                logout:
+                  value: |-
+                    {
+                      "message": "logged out"
+                    }
+        '500':
+          description: Sample server error response body
+          content:
+            application/json:
+              examples:
+                Internal Server Error:
+                  value:
+                    message: Internal Server Error
+      tags:
+        - Users
+  /users/fetchuser:
+    summary: User fetch path
+    description: This path pulls the current user information from the application
+    post:
+      summary: fetch active user
+      description: This path fetches existing application user
+      operationId: fetchuser
+      responses:
+        '200':
+          description: Successful fetchuser response body
+          content:
+            application/json:
+              examples:
+                fetchuser:
+                  value: |-
+                    {
+                      "user": {
+                        "id": 19,
+                        "first_name": "Tony",
+                        "last_name": "Balony",
+                        "email_address": "tonyb@email.com",
+                        "created_at": "2022-10-11T15:49:42.000Z"
+                      }
+                    }
+        '403':
+          description: Unauthorized fetch user response body
+          content:
+            application/json:
+              examples:
+                fetchuser without authorization:
+                  value: |-
+                    {
+                      "msg": "You're not authorized to view this page"
+                    }
+        '500':
+          description: Sample server error response body
+          content:
+            application/json:
+              examples:
+                Internal Server Error:
+                  value:
+                    message: Internal Server Error
+      tags:
+        - Users
+  /users/register:
+    summary: User registration path
+    description: This path is used to register a new user into the application
+    post:
+      summary: Register new user
+      description: This path registers a new user into the application database
+      operationId: registeruser
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '200':
+          description: Sample successful registerUser response body
+          content:
+            application/json:
+              examples:
+                registerUser:
+                  value: |-
+                    {
+                      "user": {
+                        "id": 19,
+                        "first_name": "Tony",
+                        "last_name": "Balony",
+                        "email_address": "tonyb@email.com",
+                        "created_at": "2022-10-11T15:49:42.000Z"
+                      }
+                    }
+        '400':
+          description: Sample bad request response body
+          content:
+            application/json:
+              examples:
+                Bad Request:
+                  value:
+                    message: Bad request
+        '403':
+          description: Sample response body for duplicate user registration
+          content:
+            application/json:
+              examples:
+                registering user already exists:
+                  value: |-
+                    {
+                      "message": "Key (email_address)=(tonyb@email.com) already exists."
+                    }
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+
+
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        email_address:
+          type: string
+        password:
+          type: string
+      xml:
+        name: Login
+    Register:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email_address:
+          type: string
+        password:
+          type: string
+      xml:
+        name: Login  
