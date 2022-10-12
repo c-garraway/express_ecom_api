@@ -1,6 +1,7 @@
 const db = require('../config/database')
 const ts = require('../utilities')
 
+//TODO: add logic for userID check before getting carts
 const getCarts = (req, res) => {
   db.pool.query('SELECT * FROM carts ORDER BY id ASC', (error, results) => {
     if (error) {

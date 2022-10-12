@@ -88,7 +88,7 @@ paths:
     summary: User fetch path
     description: This path pulls the current user information from the application
     post:
-      summary: fetch active user
+      summary: Fetch active user
       description: This path fetches existing application user
       operationId: fetchuser
       responses:
@@ -180,8 +180,265 @@ paths:
           description: Default error sample response
       tags:
         - Users
-
-
+  /products:
+    summary: Products path
+    description: This path handles get and post functions
+    get:
+      summary: Gets products from db
+      description: This operation will get all products from the application database
+      operationId: getAllProducts
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+    post:
+      summary: Add new product information
+      description: >-
+        This operation will update all product details on the application
+        database
+      operationId: add product
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+  /products/:id:
+    summary: Handles individual product requests
+    description: This path is used to get, put and delete individual products
+    get:
+      summary: Get product information
+      description: >-
+        This operation gets all information on an individual product from
+        application database
+      operationId: 'get single product '
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+    put:
+      summary: Update product
+      description: This operation will update detail information of an existing product
+      operationId: update product
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+    delete:
+      summary: Delete product
+      description: This operation will delete all information for a single product
+      operationId: Delete product
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+  /carts:
+    summary: Handles cart interactions
+    description: This path handles CRUD operations on the cart table
+    get:
+      summary: Get carts information
+      description: Get information from all carts
+      operationId: Get carts information
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+    post:
+      summary: Create cart
+      description: Create cart item in application database
+      operationId: Create cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+  /carts/:id:
+    summary: Handles individual cart operations
+    description: This path will handle cart get, put and delete on individual item
+    get:
+      summary: Get cart
+      description: This operation will get information on an individual cart item
+      operationId: Get single cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+    put:
+      summary: Update cart information
+      description: This operation will update information for a cart item
+      operationId: Update cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+    delete:
+      summary: Delete cart information
+      description: This operation will delete a cart item
+      operationId: Delete cart
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+  /cartitems:
+    summary: Handles cart item operations
+    description: This path will handle cart items get and post operations
+    get:
+      summary: Get cart items
+      description: This operation will get all cart items
+      operationId: Get cart items
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Cart Items
+    post:
+      summary: Create new cart item
+      description: This operation creates a new cart item in application db
+      operationId: Create cart item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Cart Items
+  /cartitems/:id:
+    summary: Handles individual cart item operations
+    description: This path will handle get, put and delete on individual cart items
+    get:
+      summary: Get cart item
+      description: Gets an individual cart item
+      operationId: Get cart item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Cart Items
+    put:
+      summary: Update cart item
+      description: Updates an individual cart item
+      operationId: Update cart item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Cart Items
+    delete:
+      summary: Delete cart item
+      description: Deletes an individual cart item
+      operationId: Delete cart item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Cart Items
+  /orders:
+    summary: Handles order operations
+    description: Handles get and post order operations
+    get:
+      summary: Get all orders
+      description: Gets all orders listed in the application
+      operationId: Get orders
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    post:
+      summary: Create order
+      description: Create an order in the database
+      operationId: Create order
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /orders/:id:
+    summary: Handles operations on individual order items
+    description: Handles get, put and delete operations on individual order items
+    get:
+      summary: Get order
+      description: Gets an individual order
+      operationId: Get order
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    put:
+      summary: Update order
+      description: Updates an existing order
+      operationId: Update order
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    delete:
+      summary: Delete order
+      description: Deletes an order from database
+      operationId: Delete order
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /orderitems:
+    summary: Handles orderitems operations
+    description: Handles get and post orderitems operations
+    get:
+      summary: Get order items
+      description: Gets all order items in database
+      operationId: Get order items
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Order Items
+    post:
+      summary: Create order items
+      description: Adds new order item to database
+      operationId: Create order items
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Order Items
+  /orderitems/:id:
+    summary: Handles individual orderitems operations
+    description: Handles get, put and delete orderitems operations
+    get:
+      summary: Get order item
+      description: Gets an individual order item from database
+      operationId: Get order item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Order Items
+    put:
+      summary: Update order item
+      description: Updates existing order item
+      operationId: Update order item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Order Items
+    delete:
+      summary: Delete order item
+      description: Deletes individual order item
+      operationId: Delete order item
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Order Items
 components:
   schemas:
     Login:
@@ -205,4 +462,4 @@ components:
         password:
           type: string
       xml:
-        name: Login  
+        name: Login
