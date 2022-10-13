@@ -30,7 +30,7 @@ created_at = ts.timestamp
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
         throw error
     }
-    res.status(201).send(`Cart added with ID: ${results.rows[0].id}`)
+    res.status(201).send(`CartItem added with ID: ${results.rows[0].id}`)
   })
 }
 
@@ -49,9 +49,9 @@ const updateCartItem = (req, res) => {
       if (typeof results.rows == 'undefined') {
           res.status(404).send(`Resource not found`);
       } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-          res.status(404).send(`Cart not found`);
+          res.status(404).send(`CartItem not found`);
       } else {
-             res.status(200).send(`Cart modified with ID: ${results.rows[0].id}`)         	
+             res.status(200).send(`CartItem modified with ID: ${results.rows[0].id}`)         	
       }
     }
   )
@@ -63,7 +63,7 @@ const deleteCartItem = (req, res) => {
     if (error) {
       throw error
     }
-    res.status(200).send(`Cart deleted with ID: ${id}`)
+    res.status(200).send(`CartItem deleted with ID: ${id}`)
   })
 }
 

@@ -8,7 +8,7 @@ const getProducts = (req, res) => {
     res.status(200).json(results.rows)
   })
 }
-
+//TODO: add check for existing product
 const getProductById = (req, res) => {
   const id = parseInt(req.params.id)
       db.pool.query('SELECT * FROM products WHERE id = $1', [id], (error, results) => {

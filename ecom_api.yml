@@ -188,6 +188,27 @@ paths:
       description: This operation will get all products from the application database
       operationId: getAllProducts
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                Get products:
+                  value: |-
+                    [
+                      {
+                        "id": 1,
+                        "name": "Product1",
+                        "description": "Product1 description",
+                        "price": "10.99"
+                      },
+                      {
+                        "id": 2,
+                        "name": "Product2",
+                        "description": "Product2 description",
+                        "price": "10.99"
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -198,12 +219,25 @@ paths:
         This operation will update all product details on the application
         database
       operationId: add product
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                addProduct:
+                  value: 'Product added with ID: 13'
         default:
           description: Default error sample response
       tags:
         - Products
-  /products/:id:
+  /products/{id}:
     summary: Handles individual product requests
     description: This path is used to get, put and delete individual products
     get:
@@ -212,7 +246,29 @@ paths:
         This operation gets all information on an individual product from
         application database
       operationId: 'get single product '
+      parameters:
+        - name: id
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                Get product:
+                  value: |-
+                    [
+                      {
+                        "id": 1,
+                        "name": "Product1",
+                        "description": "Product1 description",
+                        "price": "10.99"
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -221,7 +277,27 @@ paths:
       summary: Update product
       description: This operation will update detail information of an existing product
       operationId: update product
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      parameters:
+        - name: id
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                updateProduct:
+                  value: 'Product modified with ID: 2'
         default:
           description: Default error sample response
       tags:
@@ -230,7 +306,21 @@ paths:
       summary: Delete product
       description: This operation will delete all information for a single product
       operationId: Delete product
+      parameters:
+        - name: id
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                deleteProduct:
+                  value: 'Product deleted with ID: 1'
         default:
           description: Default error sample response
       tags:
@@ -243,6 +333,29 @@ paths:
       description: Get information from all carts
       operationId: Get carts information
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getCarts:
+                  value: |-
+                    [
+                      {
+                        "id": 1,
+                        "user_id": 2,
+                        "created_at": "2022-10-04T19:25:30.000Z",
+                        "modified_at": "2022-10-04T19:25:30.000Z",
+                        "total": null
+                      },
+                      {
+                        "id": 2,
+                        "user_id": 2,
+                        "created_at": "2022-10-04T19:57:38.000Z",
+                        "modified_at": null,
+                        "total": null
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -251,19 +364,55 @@ paths:
       summary: Create cart
       description: Create cart item in application database
       operationId: Create cart
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                addCart:
+                  value: 'Cart added with ID: 3'
         default:
           description: Default error sample response
       tags:
         - Carts
-  /carts/:id:
+  /carts/{id}:
     summary: Handles individual cart operations
     description: This path will handle cart get, put and delete on individual item
     get:
       summary: Get cart
       description: This operation will get information on an individual cart item
       operationId: Get single cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getCart:
+                  value: |-
+                    [
+                      {
+                        "id": 1,
+                        "user_id": 2,
+                        "created_at": "2022-10-04T19:25:30.000Z",
+                        "modified_at": "2022-10-04T19:25:30.000Z",
+                        "total": null
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -272,7 +421,27 @@ paths:
       summary: Update cart information
       description: This operation will update information for a cart item
       operationId: Update cart
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                updateCart:
+                  value: 'Cart modified with ID: 1'
         default:
           description: Default error sample response
       tags:
@@ -281,7 +450,21 @@ paths:
       summary: Delete cart information
       description: This operation will delete a cart item
       operationId: Delete cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cartDeleted:
+                  value: 'Cart deleted with ID: 13'
         default:
           description: Default error sample response
       tags:
@@ -294,6 +477,31 @@ paths:
       description: This operation will get all cart items
       operationId: Get cart items
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getCartItems:
+                  value: |-
+                    [
+                      {
+                        "id": 1,
+                        "cart_id": 1,
+                        "product_id": 5,
+                        "quantity": 1,
+                        "created_at": "2022-10-04T19:48:10.000Z",
+                        "modified_at": null
+                      },
+                      {
+                        "id": 2,
+                        "cart_id": 1,
+                        "product_id": 4,
+                        "quantity": 2,
+                        "created_at": "2022-10-04T19:48:10.000Z",
+                        "modified_at": null
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -302,19 +510,56 @@ paths:
       summary: Create new cart item
       description: This operation creates a new cart item in application db
       operationId: Create cart item
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cartitems'
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                addCartItem:
+                  value: 'CartItem added with ID: 1'
         default:
           description: Default error sample response
       tags:
         - Cart Items
-  /cartitems/:id:
+  /cartitems/{id}:
     summary: Handles individual cart item operations
     description: This path will handle get, put and delete on individual cart items
     get:
       summary: Get cart item
       description: Gets an individual cart item
       operationId: Get cart item
+      parameters:
+        - name: id
+          in: path
+          description: Cartitems ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getCartItem:
+                  value: |-
+                    [
+                      {
+                        "id": 5,
+                        "cart_id": 2,
+                        "product_id": 6,
+                        "quantity": 3,
+                        "created_at": "2022-10-04T19:57:38.000Z",
+                        "modified_at": null
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -323,7 +568,27 @@ paths:
       summary: Update cart item
       description: Updates an individual cart item
       operationId: Update cart item
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cartitems'
+      parameters:
+        - name: id
+          in: path
+          description: Cartitems ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                updateCartItem:
+                  value: 'Cartitem modified with ID: 1'
         default:
           description: Default error sample response
       tags:
@@ -332,7 +597,21 @@ paths:
       summary: Delete cart item
       description: Deletes an individual cart item
       operationId: Delete cart item
+      parameters:
+        - name: id
+          in: path
+          description: Cartitems ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                deleteCartItem:
+                  value: 'CartItem deleted with ID: 13'
         default:
           description: Default error sample response
       tags:
@@ -345,6 +624,23 @@ paths:
       description: Gets all orders listed in the application
       operationId: Get orders
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getOrders:
+                  value: |-
+                    [
+                      {
+                        "id": 2,
+                        "user_id": 3,
+                        "total": "346",
+                        "status": "pending",
+                        "created_at": "2022-10-13T18:33:34.000Z",
+                        "modified_at": null
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -353,19 +649,56 @@ paths:
       summary: Create order
       description: Create an order in the database
       operationId: Create order
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                addOrder:
+                  value: 'Order added with ID: 2'
         default:
           description: Default error sample response
       tags:
         - Orders
-  /orders/:id:
+  /orders/{id}:
     summary: Handles operations on individual order items
     description: Handles get, put and delete operations on individual order items
     get:
       summary: Get order
       description: Gets an individual order
       operationId: Get order
+      parameters:
+        - name: id
+          in: path
+          description: Order ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getOrder:
+                  value: |-
+                    [
+                      {
+                        "id": 2,
+                        "user_id": 3,
+                        "total": "346",
+                        "status": "pending",
+                        "created_at": "2022-10-13T18:33:34.000Z",
+                        "modified_at": null
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -374,7 +707,27 @@ paths:
       summary: Update order
       description: Updates an existing order
       operationId: Update order
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      parameters:
+        - name: id
+          in: path
+          description: order ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                updateOrder:
+                  value: 'Order modified with ID: 2'
         default:
           description: Default error sample response
       tags:
@@ -383,7 +736,21 @@ paths:
       summary: Delete order
       description: Deletes an order from database
       operationId: Delete order
+      parameters:
+        - name: id
+          in: path
+          description: order ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                deleteOrder:
+                  value: 'Order deleted with ID: 2'
         default:
           description: Default error sample response
       tags:
@@ -396,6 +763,31 @@ paths:
       description: Gets all order items in database
       operationId: Get order items
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getOrderItems:
+                  value: |-
+                    [
+                      {
+                        "id": 4,
+                        "order_id": 2,
+                        "product_id": 3,
+                        "quantity": 2,
+                        "created_at": "2022-10-13T19:23:43.000Z",
+                        "modified_at": "2022-10-13T19:23:43.000Z"
+                      },
+                      {
+                        "id": 5,
+                        "order_id": 1,
+                        "product_id": 1,
+                        "quantity": 4,
+                        "created_at": "2022-10-13T19:23:43.000Z",
+                        "modified_at": "2022-10-13T19:23:43.000Z"
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -404,19 +796,56 @@ paths:
       summary: Create order items
       description: Adds new order item to database
       operationId: Create order items
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Orderitems'
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                addOrderItem:
+                  value: 'Order added with ID: 4'
         default:
           description: Default error sample response
       tags:
         - Order Items
-  /orderitems/:id:
+  /orderitems/{id}:
     summary: Handles individual orderitems operations
     description: Handles get, put and delete orderitems operations
     get:
       summary: Get order item
       description: Gets an individual order item from database
       operationId: Get order item
+      parameters:
+        - name: id
+          in: path
+          description: orderItems ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            application/json:
+              examples:
+                getOrderItem:
+                  value: |-
+                    [
+                      {
+                        "id": 4,
+                        "order_id": 2,
+                        "product_id": 3,
+                        "quantity": 2,
+                        "created_at": "2022-10-13T19:23:43.000Z",
+                        "modified_at": "2022-10-13T19:23:43.000Z"
+                      }
+                    ]
         default:
           description: Default error sample response
       tags:
@@ -425,7 +854,27 @@ paths:
       summary: Update order item
       description: Updates existing order item
       operationId: Update order item
+      requestBody:
+        description: Sample request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Orderitems'
+      parameters:
+        - name: id
+          in: path
+          description: orderItems ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                updateOrderItem:
+                  value: 'Order modified with ID: 4'
         default:
           description: Default error sample response
       tags:
@@ -434,7 +883,21 @@ paths:
       summary: Delete order item
       description: Deletes individual order item
       operationId: Delete order item
+      parameters:
+        - name: id
+          in: path
+          description: orderItems ID
+          required: true
+          schema:
+            type: integer
       responses:
+        '200':
+          description: Successful response body
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                deleteItem:
+                  value: 'Order deleted with ID: 4'
         default:
           description: Default error sample response
       tags:
@@ -462,4 +925,57 @@ components:
         password:
           type: string
       xml:
-        name: Login
+        name: Register
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+      xml:
+        name: Product
+    Cart:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        total:
+          type: number
+      xml:
+        name: Cart
+    Cartitems:
+      type: object
+      properties:
+        cart_id:
+          type: integer
+        product_id:
+          type: integer
+        quantity:
+          type: integer
+      xml:
+        name: Cartitems
+    Order:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        total:
+          type: number
+        status:
+          type: string
+      xml:
+        name: Order
+    Orderitems:
+      type: object
+      properties:
+        order_id:
+          type: integer
+        product_id:
+          type: integer
+        quantity:
+          type: integer
+      xml:
+        name: Orderitems
