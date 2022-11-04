@@ -12,8 +12,8 @@ const getCarts = (req, res) => {
 }
 
 const getCartByUserId = (req, res) => {
-  const id = parseInt(req.params.id)
-      db.pool.query('SELECT * FROM carts WHERE id = $1', [id], (error, results) => {
+  const user_id = parseInt(req.params.id)
+      db.pool.query('SELECT * FROM carts WHERE user_id = $1', [user_id], (error, results) => {
           if (error) {
           throw error
           }

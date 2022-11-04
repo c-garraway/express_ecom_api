@@ -16,7 +16,7 @@ const ensureAuthentication = (req, res, next) => {
     if (req.session.authenticated) {
         return next();
     } else {
-        res.status(403).json({ msg: "You're not authorized to view this page" });
+        res.status(403).json({ message: "You're not authorized to view this page" });
     }
 }
 

@@ -5,10 +5,10 @@ const { ensureAuthentication } = require('../utilities')
 cartItemsRouter = express.Router()
 
 // cartItems CRUD
-cartItemsRouter.get('/', ensureAuthentication, cartItems.getCartItems)
-cartItemsRouter.get('/:id', ensureAuthentication, cartItems.getCartItemsByCartId)
-cartItemsRouter.post('/', ensureAuthentication, cartItems.createCartItem)
-cartItemsRouter.put('/:id', ensureAuthentication, cartItems.updateCartItem)
-cartItemsRouter.delete('/:id', ensureAuthentication, cartItems.deleteCartItem)
+cartItemsRouter.get('/', cartItems.getCartItems)
+cartItemsRouter.get('/:id', cartItems.getCartItemsByUserId)
+cartItemsRouter.post('/', cartItems.createCartItem)
+cartItemsRouter.put('/:id', cartItems.updateCartItem)
+cartItemsRouter.delete('/:id', cartItems.deleteCartItem)
 
 module.exports = cartItemsRouter

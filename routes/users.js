@@ -5,8 +5,8 @@ const { ensureAuthentication } = require('../utilities')
 usersRouter = express.Router()
 
 // users CRUD
-usersRouter.post('/logout', ensureAuthentication, user.logoutUser)
-usersRouter.post('/fetchUser', ensureAuthentication, user.fetchUser)
+usersRouter.post('/logout', user.logoutUser)
+usersRouter.post('/fetchUser', user.fetchUser)
 usersRouter.post('/register', user.registerUser)
 usersRouter.post('/login', user.loginUser)
 //usersRouter.put('/users/:id', ensureAuthentication, users.updateUser)

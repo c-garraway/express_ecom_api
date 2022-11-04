@@ -1,11 +1,12 @@
 require('dotenv').config()
 const morgan = require('morgan')
 const express = require('express')
-
+const cors = require('cors')
 
 // express app init and config
 const app = express()
-app.use(morgan('short'))
+app.use(morgan('common'))
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

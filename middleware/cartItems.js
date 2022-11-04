@@ -10,11 +10,11 @@ const getCartItems = (req, res) => {
   })
 }
 
-const getCartItemsByCartId = (req, res) => {
-  const cart_id = parseInt(req.params.id)
-      db.pool.query('SELECT * FROM cartItems WHERE cart_id = $1', [cart_id], (error, results) => {
+const getCartItemsByUserId = (req, res) => {
+  const user_id = parseInt(req.params.id)
+      db.pool.query('SELECT users.id AS userID, carts.id AS cartID, cartitems.product_id AS productID, cartitems.quantity, products.name, products.description, products.price FROM users, carts, cartitems, products WHERE users.id = carts.user_id AND carts.id = cartitems.cart_id AND products.id = cartitems.product_id AND users.id = $1 ORDER BY productID', [user_id], (error, results) => {
           if (error) {
-          throw error
+            throw error
           }
           res.status(200).json(results.rows)
       })
@@ -69,7 +69,7 @@ const deleteCartItem = (req, res) => {
 
 module.exports = {
   getCartItems,
-  getCartItemsByCartId,
+  getCartItemsByUserId,
   createCartItem,
   updateCartItem,
   deleteCartItem
