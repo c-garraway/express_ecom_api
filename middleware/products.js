@@ -1,7 +1,7 @@
 const db = require('../config/database')
 
 const getProducts = (req, res) => {
-  db.pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
+  db.pool.query('SELECT id, name, LOWER(description) AS description, ROUND(price,2) AS price FROM products ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }

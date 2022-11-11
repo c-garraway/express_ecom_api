@@ -11,39 +11,59 @@ const getCarts = (req, res) => {
   })
 }
 
-const getCartByUserId = (req, res) => {
+const getCartByUserId = async (req, res) => {
   const user_id = parseInt(req.params.id)
-      db.pool.query('SELECT * FROM carts WHERE user_id = $1', [user_id], (error, results) => {
-          if (error) {
-          throw error
-          }
-          res.status(200).json(results.rows)
-      })
-}
 
-const createCart = (req, res) => {
+  try {
+    const data = await db.pool.query('SELECT * FROM carts WHERE user_id = $1', [user_id] )
 
-created_at = ts.timestamp
-
-  const { user_id} = req.body
-  db.pool.query('INSERT INTO carts (user_id, created_at) VALUES ($1, $2) RETURNING *', [user_id, created_at], (error, results) => {
-    if (error) {
-      throw error
-    } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-        throw error
+    if (data.rows.length === 0) {
+        return res.status(404).send({message: "Cart Not Found"})
     }
-    res.status(201).send(`Cart added with ID: ${results.rows[0].id}`)
-  })
+    const cart = data.rows[0]
+    
+    res.status(200)
+    return res.json({cart})
+      
+  } catch (error) {
+      return res.status(403).send({message: error.detail})
+  }
+      
+}
+
+const createCart = async (req, res) => {
+
+  const {user_id} = req.body
+
+  try {
+    
+    created_at = ts.timestamp
+
+    const data = await db.pool.query(
+        'INSERT INTO carts (user_id, created_at) VALUES ($1, $2) RETURNING *',
+        [user_id, created_at]
+    )
+
+    if (data.rows.length === 0) {
+        return res.status(400).send({message: "Bad request"})
+    }
+    const cart = data.rows[0]
+    
+    res.status(200)
+    return res.json({cart})
+
+  } catch (e) {
+    return res.status(403).send({message: e.detail})
+  }
 }
 
 
-const updateCart = (req, res) => {
-  const id = parseInt(req.params.id)
+const updateCartByUserId = (req, res) => {
+  const user_id = parseInt(req.params.id)
   modified_at = ts.timestamp
-  const { user_id } = req.body
   db.pool.query(
-    'UPDATE carts SET user_id = $1, modified_at = $2 WHERE id = $3 RETURNING *',
-    [user_id, modified_at, id],
+    'UPDATE carts SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, carts, cartitems, products WHERE users.id = carts.user_id AND carts.id = cartitems.cart_id AND products.id = cartitems.product_id AND users.id = $1) WHERE carts.user_id = $1 RETURNING *',
+    [user_id],
     (error, results) => {
       if (error) {
         throw error
@@ -53,7 +73,7 @@ const updateCart = (req, res) => {
       } else if (Array.isArray(results.rows) && results.rows.length < 1) {
           res.status(404).send(`Cart not found`);
       } else {
-             res.status(200).send(`Cart modified with ID: ${results.rows[0].id}`)         	
+             res.status(200).send(results.rows)         	
       }
     }
   )
@@ -73,6 +93,6 @@ module.exports = {
   getCarts,
   getCartByUserId,
   createCart,
-  updateCart,
+  updateCartByUserId,
   deleteCart
 }
