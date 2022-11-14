@@ -5,10 +5,10 @@ const { ensureAuthentication } = require('../utilities')
 ordersRouter = express.Router()
 
 // orders CRUD
-ordersRouter.get('/', ensureAuthentication, orders.getOrders)
-ordersRouter.get('/:id', ensureAuthentication, orders.getOrderById)
-ordersRouter.post('/', ensureAuthentication, orders.createOrder)
-ordersRouter.put('/:id', ensureAuthentication, orders.updateOrder)
-ordersRouter.delete('/:id', ensureAuthentication, orders.deleteOrder)
+ordersRouter.get('/', orders.getOrders)
+ordersRouter.get('/user/:id', orders.getOrderByUserId)
+ordersRouter.post('/', orders.createOrder)
+ordersRouter.put('/user/:id', orders.updateOrderByUserId)
+ordersRouter.delete('/:id', orders.deleteOrder)
 
 module.exports = ordersRouter

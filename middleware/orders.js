@@ -1,77 +1,107 @@
 const db = require('../config/database')
 const ts = require('../utilities')
 
-const getOrders = (req, res) => {
-  db.pool.query('SELECT * FROM orders ORDER BY id ASC', (error, results) => {
-    if (error) {
-      throw error
+const getOrders = async (req, res) => {
+
+  try {
+    const data = await db.pool.query('SELECT * FROM orders ORDER BY id ASC'
+    )
+    if (data.rows.length === 0) {
+      return res.status(404).send({message: "Carts Not Found"})
     }
-    res.status(200).json(results.rows)
-  })
+    const orders = data.rows
+  
+    res.status(200).send({orders})
+    
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
 }
 
-const getOrderById = (req, res) => {
-  const id = parseInt(req.params.id)
-      db.pool.query('SELECT * FROM orders WHERE id = $1', [id], (error, results) => {
-          if (error) {
-          throw error
-          }
-          res.status(200).json(results.rows)
-      })
+const getOrderByUserId = async (req, res) => {
+  const user_id = parseInt(req.params.id)
+
+  try {
+    const data = await db.pool.query('SELECT * FROM orders WHERE user_id = $1', [user_id]
+    )
+    
+    if (data.rows.length === 0) {
+      return res.status(404).send({message: "Cart Not Found"})
+    }
+    const order = data.rows[0]
+    
+    res.status(200).send({order})
+
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }    
 }
 
-const createOrder = (req, res) => {
-
-created_at = ts.timestamp
-
+const createOrder = async (req, res) => {
+  const created_at = ts.timestamp
   const { user_id, total, status} = req.body
-  db.pool.query('INSERT INTO orders (user_id, total, status, created_at) VALUES ($1, $2, $3, $4) RETURNING *', [user_id, total, status, created_at], (error, results) => {
-    if (error) {
-      throw error
-    } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-        throw error
+  try {
+    const data = await db.pool.query('INSERT INTO orders (user_id, total, status, created_at) VALUES ($1, $2, $3, $4) RETURNING *', [user_id, total, status, created_at]
+    )
+
+    if (data.rows.length === 0) {
+      return res.status(400).send({message: "Bad request"})
     }
-    res.status(201).send(`Order added with ID: ${results.rows[0].id}`)
-  })
+    const order = data.rows[0]
+    
+    res.status(201).send({order})
+    
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
 }
 
-
-const updateOrder = (req, res) => {
+const updateOrderByUserId = async (req, res) => {
   const id = parseInt(req.params.id)
-  modified_at = ts.timestamp
+  const modified_at = ts.timestamp
   const { user_id, total, status} = req.body
-  db.pool.query(
-    'UPDATE orders SET user_id = $1, total = $2, status = $3, modified_at = $4 WHERE id = $5 RETURNING *',
-    [user_id, total, status, modified_at, id],
-    (error, results) => {
-      if (error) {
-        throw error
-      } 
-      if (typeof results.rows == 'undefined') {
-          res.status(404).send(`Resource not found`);
-      } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-          res.status(404).send(`Order not found`);
-      } else {
-             res.status(200).send(`Order modified with ID: ${results.rows[0].id}`)         	
-      }
+
+  try {
+    const data = await db.pool.query(
+      'UPDATE orders SET user_id = $1, total = $2, status = $3, modified_at = $4 WHERE id = $5 RETURNING *',
+      [user_id, total, status, modified_at, id]
+    )
+    if (data.rows.length === 0) {
+      return res.status(400).send({message: "Cart Not Found"})
     }
-  )
+
+    const order = data.rows[0]
+       
+    res.status(200).send({order})  
+ 
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
 }
 
-const deleteOrder = (req, res) => {
+const deleteOrder = async (req, res) => {
   const id = parseInt(req.params.id)
-  db.pool.query('DELETE FROM orders WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+
+  try {
+    const data = await db.pool.query('DELETE FROM orders WHERE id = $1', [id]) 
+      
+    if (data.rows.length === 0) {
+      return res.status(400).send({message: "Order Not Found"})
     }
-    res.status(200).send(`Order deleted with ID: ${id}`)
-  })
+    const order = data.rows[0]
+
+    res.status(200).send(`Order deleted: ${order}`)
+    
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
+  
 }
 
 module.exports = {
   getOrders,
-  getOrderById,
+  getOrderByUserId,
   createOrder,
-  updateOrder,
+  updateOrderByUserId,
   deleteOrder
 }
