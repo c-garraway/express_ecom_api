@@ -1,14 +1,22 @@
 const db = require('../config/database')
 const ts = require('../utilities')
 
-//TODO: add logic for userID check before getting carts
-const getCarts = (req, res) => {
-  db.pool.query('SELECT * FROM carts ORDER BY id ASC', (error, results) => {
-    if (error) {
-      throw error
+
+const getCarts = async (req, res) => {
+
+  try {
+    const data = await db.pool.query('SELECT * FROM carts ORDER BY id ASC') 
+
+    if (data.rows.length === 0) {
+      return res.status(404).send({message: "Carts Not Found"})
     }
-    res.status(200).json(results.rows)
-  })
+    const carts = data.rows
+  
+    res.status(200).send({carts})
+    
+  } catch (error) {
+      res.status(403).send({message: error.detail})
+  }
 }
 
 const getCartByUserId = async (req, res) => {
@@ -18,75 +26,78 @@ const getCartByUserId = async (req, res) => {
     const data = await db.pool.query('SELECT * FROM carts WHERE user_id = $1', [user_id] )
 
     if (data.rows.length === 0) {
-        return res.status(404).send({message: "Cart Not Found"})
+      return res.status(404).send({message: "Cart Not Found"})
     }
     const cart = data.rows[0]
     
-    res.status(200)
-    return res.json({cart})
+    res.status(200).send({cart})
       
   } catch (error) {
-      return res.status(403).send({message: error.detail})
+      res.status(403).send({message: error.detail})
   }
       
 }
 
 const createCart = async (req, res) => {
-
   const {user_id} = req.body
+  const created_at = ts.timestamp
 
-  try {
-    
-    created_at = ts.timestamp
-
+  try {  
     const data = await db.pool.query(
         'INSERT INTO carts (user_id, created_at) VALUES ($1, $2) RETURNING *',
         [user_id, created_at]
     )
 
     if (data.rows.length === 0) {
-        return res.status(400).send({message: "Bad request"})
+      return res.status(400).send({message: "Bad request"})
     }
     const cart = data.rows[0]
     
-    res.status(200)
-    return res.json({cart})
+    res.status(201).send({cart})
 
-  } catch (e) {
-    return res.status(403).send({message: e.detail})
+  } catch (error) {
+      res.status(403).send({message: error.detail})
   }
 }
 
 
-const updateCartByUserId = (req, res) => {
+const updateCartByUserId = async (req, res) => {
   const user_id = parseInt(req.params.id)
-  modified_at = ts.timestamp
-  db.pool.query(
-    'UPDATE carts SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, carts, cartitems, products WHERE users.id = carts.user_id AND carts.id = cartitems.cart_id AND products.id = cartitems.product_id AND users.id = $1) WHERE carts.user_id = $1 RETURNING *',
-    [user_id],
-    (error, results) => {
-      if (error) {
-        throw error
-      } 
-      if (typeof results.rows == 'undefined') {
-          res.status(404).send(`Resource not found`);
-      } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-          res.status(404).send(`Cart not found`);
-      } else {
-             res.status(200).send(results.rows)         	
-      }
+
+  try {
+    const data = await db.pool.query(
+      'UPDATE carts SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, carts, cartitems, products WHERE users.id = carts.user_id AND carts.id = cartitems.cart_id AND products.id = cartitems.product_id AND users.id = $1) WHERE carts.user_id = $1 RETURNING *',
+      [user_id])
+       
+    if (data.rows.length === 0) {
+      return res.status(400).send({message: "Cart Not Found"})
     }
-  )
+
+    const cart = data.rows[0]
+       
+    res.status(200).send({cart})       	
+
+  } catch (error) {
+      res.status(403).send({message: error.detail})
+  }
 }
 
-const deleteCart = (req, res) => {
+const deleteCart = async (req, res) => {
   const id = parseInt(req.params.id)
-  db.pool.query('DELETE FROM carts WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+
+  try {
+    const data = await db.pool.query('DELETE FROM carts WHERE id = $1', [id])
+     
+    if (data.rows.length === 0) {
+      return res.status(400).send({message: "Cart Not Found"})
     }
-    res.status(200).send(`Cart deleted with ID: ${id}`)
-  })
+    const cart = data.rows[0]
+
+    res.status(200).send(`Cart deleted: ${cart}`)
+    
+  } catch (error) {
+      res.status(403).send({message: error.detail})
+  }
 }
 
 module.exports = {
