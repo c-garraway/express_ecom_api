@@ -1,76 +1,107 @@
 const db = require('../config/database')
-const ts = require('../utilities')
+const ts = require('./utilities')
 
-const getOrderItems = (req, res) => {
-  db.pool.query('SELECT * FROM orderitems ORDER BY id ASC', (error, results) => {
-    if (error) {
-      throw error
+const getOrderItems = async (req, res) => {
+
+  try {
+    const data = await db.pool.query('SELECT * FROM orderitems ORDER BY id ASC') 
+      
+    if (data.rows.length === 0) {
+      return res.status(404).send({message: "Order Items Not Found"})
     }
-    res.status(200).json(results.rows)
-  })
+    const orderItems = data.rows
+  
+    res.status(200).send({orderItems})
+    
+    /* res.status(200).json(results.rows) */
+
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
+  
 }
 
-const getOrderItemById = (req, res) => {
-  const id = parseInt(req.params.id)
-      db.pool.query('SELECT * FROM orderitems WHERE id = $1', [id], (error, results) => {
-          if (error) {
-          throw error
-          }
-          res.status(200).json(results.rows)
-      })
+const getOrderItemsByUserId = async (req, res) => {
+  const user_id = parseInt(req.params.id)
+
+  try {
+    const data = await db.pool.query('SELECT orderitems.id, orderitems.product_id AS productID, orderitems.quantity, users.id AS userID, orders.id AS orderID, products.name, LOWER(products.description) AS description, ROUND(products.price,2) AS price FROM users, orders, orderitems, products WHERE users.id = orders.user_id AND orders.id = orderitems.order_id AND products.id = orderitems.product_id AND users.id = $1 ORDER BY orderitems.id', [user_id]) 
+    
+    /* if (data.rows.length === 0) {
+      return res.status(404).send(data.rows) //TODO: review response
+    } */
+    const orderItems = data.rows
+  
+    res.status(200).send(orderItems)
+
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  } 
 }
 
-const createOrderItem = (req, res) => {
-
-created_at = ts.timestamp
-
+const createOrderItem = async (req, res) => {
+  const created_at = ts.timestamp
   const { order_id, product_id, quantity} = req.body
-  db.pool.query('INSERT INTO orderitems (order_id, product_id, quantity, created_at) VALUES ($1, $2, $3, $4) RETURNING *', [order_id, product_id, quantity, created_at], (error, results) => {
-    if (error) {
-      throw error
-    } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-        throw error
+  
+  try {
+    const data = await db.pool.query('INSERT INTO orderitems (order_id, product_id, quantity, created_at) VALUES ($1, $2, $3, $4) RETURNING *', [order_id, product_id, quantity, created_at])
+    
+    if (data.rows.length === 0) {
+      return res.status(404).send({message: "Bad Request"})
     }
-    res.status(201).send(`Order added with ID: ${results.rows[0].id}`)
-  })
+    const orderItem = data.rows[0]
+  
+    res.status(200).send({orderItem})
+
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
 }
 
 
-const updateOrderItem = (req, res) => {
+const updateOrderItem = async (req, res) => {
   const id = parseInt(req.params.id)
-  modified_at = ts.timestamp
+  const modified_at = ts.timestamp
   const { order_id, product_id, quantity } = req.body
-  db.pool.query(
-    'UPDATE orderitems SET order_id = $1, product_id = $2, quantity = $3, modified_at = $4 WHERE id = $5 RETURNING *',
-    [order_id, product_id, quantity, modified_at, id],
-    (error, results) => {
-      if (error) {
-        throw error
-      } 
-      if (typeof results.rows == 'undefined') {
-          res.status(404).send(`Resource not found`);
-      } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-          res.status(404).send(`Order not found`);
-      } else {
-             res.status(200).send(`Order modified with ID: ${results.rows[0].id}`)         	
+
+  try {
+    const data = await db.pool.query(
+      'UPDATE orderitems SET order_id = $1, product_id = $2, quantity = $3, modified_at = $4 WHERE id = $5 RETURNING *',
+      [order_id, product_id, quantity, modified_at, id]) 
+    
+      if (data.rows.length === 0) {
+        return res.status(404).send({message: "Order Item Not Found"})
       }
-    }
-  )
+      const orderItem = data.rows[0]
+    
+      res.status(200).send({orderItem})
+
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
 }
 
-const deleteOrderItem = (req, res) => {
+const deleteOrderItem = async (req, res) => {
   const id = parseInt(req.params.id)
-  db.pool.query('DELETE FROM orderitems WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+
+  try {
+    const data = await db.pool.query('DELETE FROM orderitems WHERE id = $1', [id])
+
+    if (data.rows.length === 0) {
+      return res.status(404).send({message: "Bad Request"})
     }
-    res.status(200).send(`Order deleted with ID: ${id}`)
-  })
+    const orderItem = data.rows[0]
+  
+    /* res.status(200).send({orderItem}) */
+    res.status(200).send({message: `Order item deleted: ${orderItem}`})
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  } 
 }
 
 module.exports = {
   getOrderItems,
-  getOrderItemById,
+  getOrderItemsByUserId,
   createOrderItem,
   updateOrderItem,
   deleteOrderItem

@@ -1,5 +1,5 @@
 const db = require('../config/database')
-const ts = require('../utilities')
+const ts = require('./utilities')
 
 const getOrders = async (req, res) => {
 
@@ -7,7 +7,7 @@ const getOrders = async (req, res) => {
     const data = await db.pool.query('SELECT * FROM orders ORDER BY id ASC'
     )
     if (data.rows.length === 0) {
-      return res.status(404).send({message: "Carts Not Found"})
+      return res.status(404).send({message: "Orders Not Found"})
     }
     const orders = data.rows
   
@@ -26,11 +26,11 @@ const getOrderByUserId = async (req, res) => {
     )
     
     if (data.rows.length === 0) {
-      return res.status(404).send({message: "Cart Not Found"})
+      return res.status(404).send({message: "Order Not Found"})
     }
     const order = data.rows[0]
     
-    res.status(200).send({order})
+    res.status(200).send(order)
 
   } catch (error) {
     res.status(403).send({message: error.detail})
@@ -57,17 +57,16 @@ const createOrder = async (req, res) => {
 }
 
 const updateOrderByUserId = async (req, res) => {
-  const id = parseInt(req.params.id)
+  const user_id = parseInt(req.params.id)
   const modified_at = ts.timestamp
-  const { user_id, total, status} = req.body
 
   try {
     const data = await db.pool.query(
-      'UPDATE orders SET user_id = $1, total = $2, status = $3, modified_at = $4 WHERE id = $5 RETURNING *',
-      [user_id, total, status, modified_at, id]
+      'UPDATE orders SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, orders, orderitems, products WHERE users.id = orders.user_id AND orders.id = orderitems.order_id AND products.id = orderitems.product_id AND users.id = $1), modified_at = $2 WHERE carts.user_id = $1 RETURNING *',
+      [user_id, modified_at]
     )
     if (data.rows.length === 0) {
-      return res.status(400).send({message: "Cart Not Found"})
+      return res.status(400).send({message: "Order Not Found"})
     }
 
     const order = data.rows[0]

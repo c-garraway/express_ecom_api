@@ -1,5 +1,5 @@
 const db = require('../config/database')
-const ts = require('../utilities')
+const ts = require('./utilities')
 
 const getCartItems = async (req, res) => {
 
@@ -35,7 +35,6 @@ const getCartItemsByUserId = async (req, res) => {
   } catch (error) {
     res.status(403).send({message: error.detail})
   }
-      
 }
 
 const createCartItem = async (req, res) => {
@@ -70,7 +69,7 @@ const updateCartItem = async (req, res) => {
       [cart_id, product_id, quantity, modified_at, id])
 
     if (data.rows.length === 0) {
-      return res.status(404).send({message: "Bad Request"})
+      return res.status(404).send({message: "Cart Item Not Found"})
     }
     const cartItem = data.rows[0]           
       

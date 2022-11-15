@@ -1,7 +1,7 @@
 const { pool } = require('../config/database')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
-const { timestamp } = require('../utilities')
+const { timestamp } = require('./utilities')
 
 const registerUser = async (req, res) => {
     const { first_name, last_name, email_address, password } = req.body

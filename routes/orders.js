@@ -1,11 +1,11 @@
 const express = require('express');
 const orders = require('../middleware/orders')
-const { ensureAuthentication } = require('../utilities')
+const { ensureAuthentication } = require('../middleware/utilities')
 
 ordersRouter = express.Router()
 
 // orders CRUD
-ordersRouter.get('/', orders.getOrders)
+/* ordersRouter.get('/', orders.getOrders) */
 ordersRouter.get('/user/:id', orders.getOrderByUserId)
 ordersRouter.post('/', orders.createOrder)
 ordersRouter.put('/user/:id', orders.updateOrderByUserId)

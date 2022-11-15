@@ -1,11 +1,11 @@
 const express = require('express');
 const cart = require('../middleware/carts')
-const { ensureAuthentication } = require('../utilities')
+const { ensureAuthentication } = require('../middleware/utilities')
 
 cartsRouter = express.Router()
 
 // cart CRUD
-cartsRouter.get('/', cart.getCarts)
+/* cartsRouter.get('/', cart.getCarts) */
 cartsRouter.get('/user/:id', cart.getCartByUserId)
 cartsRouter.post('/',  cart.createCart)
 cartsRouter.put('/user/:id', cart.updateCartByUserId)

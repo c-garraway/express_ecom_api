@@ -1,5 +1,5 @@
 const db = require('../config/database')
-const ts = require('../utilities')
+const ts = require('./utilities')
 
 
 const getCarts = async (req, res) => {
@@ -30,7 +30,7 @@ const getCartByUserId = async (req, res) => {
     }
     const cart = data.rows[0]
     
-    res.status(200).send({cart})
+    res.status(200).send(cart)
       
   } catch (error) {
       res.status(403).send({message: error.detail})
@@ -63,11 +63,12 @@ const createCart = async (req, res) => {
 
 const updateCartByUserId = async (req, res) => {
   const user_id = parseInt(req.params.id)
+  const modified_at = ts.timestamp
 
   try {
     const data = await db.pool.query(
-      'UPDATE carts SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, carts, cartitems, products WHERE users.id = carts.user_id AND carts.id = cartitems.cart_id AND products.id = cartitems.product_id AND users.id = $1) WHERE carts.user_id = $1 RETURNING *',
-      [user_id])
+      'UPDATE carts SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, carts, cartitems, products WHERE users.id = carts.user_id AND carts.id = cartitems.cart_id AND products.id = cartitems.product_id AND users.id = $1), modified_at = $2 WHERE carts.user_id = $1 RETURNING *',
+      [user_id, modified_at])
        
     if (data.rows.length === 0) {
       return res.status(400).send({message: "Cart Not Found"})
