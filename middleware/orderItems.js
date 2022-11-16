@@ -86,14 +86,14 @@ const deleteOrderItem = async (req, res) => {
 
   try {
     const data = await db.pool.query('DELETE FROM orderitems WHERE id = $1', [id])
-
-    if (data.rows.length === 0) {
+    
+    /* if (data.rows.length === 0) {
       return res.status(404).send({message: "Bad Request"})
-    }
+    } */
     const orderItem = data.rows[0]
   
     /* res.status(200).send({orderItem}) */
-    res.status(200).send({message: `Order item deleted: ${orderItem}`})
+    res.status(200).send({message: `Deleted order item id: ${id}`})
   } catch (error) {
     res.status(403).send({message: error.detail})
   } 

@@ -39,9 +39,9 @@ const getOrderByUserId = async (req, res) => {
 
 const createOrder = async (req, res) => {
   const created_at = ts.timestamp
-  const { user_id, total, status} = req.body
+  const { user_id, status} = req.body
   try {
-    const data = await db.pool.query('INSERT INTO orders (user_id, total, status, created_at) VALUES ($1, $2, $3, $4) RETURNING *', [user_id, total, status, created_at]
+    const data = await db.pool.query('INSERT INTO orders (user_id, status, created_at) VALUES ($1, $2, $3) RETURNING *', [user_id, status, created_at]
     )
 
     if (data.rows.length === 0) {
@@ -62,7 +62,7 @@ const updateOrderByUserId = async (req, res) => {
 
   try {
     const data = await db.pool.query(
-      'UPDATE orders SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, orders, orderitems, products WHERE users.id = orders.user_id AND orders.id = orderitems.order_id AND products.id = orderitems.product_id AND users.id = $1), modified_at = $2 WHERE carts.user_id = $1 RETURNING *',
+      'UPDATE orders SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, orders, orderitems, products WHERE users.id = orders.user_id AND orders.id = orderitems.order_id AND products.id = orderitems.product_id AND users.id = $1), tax = ROUND(total * .13, 2), grand_total = total + tax + shipping, modified_at = $2 WHERE orders.user_id = $1 RETURNING *',
       [user_id, modified_at]
     )
     if (data.rows.length === 0) {

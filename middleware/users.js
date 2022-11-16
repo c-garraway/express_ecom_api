@@ -75,6 +75,7 @@ const loginUser =  async (req, res) => {
             first_name: user.first_name,
             last_name: user.last_name,
             email_address: user.email_address,
+            address: user.address,
             created_at: user.created_at
         }
 
