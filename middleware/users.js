@@ -4,11 +4,12 @@ const uuid = require('uuid')
 const { timestamp } = require('./utilities')
 
 const registerUser = async (req, res) => {
-    const { first_name, last_name, email_address, password } = req.body
+    const { first_name, last_name, address, email_address, password } = req.body
 
     if (
         first_name == null ||
         last_name == null ||
+        address == null ||
         email_address == null ||
         password == null
     ) {
@@ -20,8 +21,8 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, salt)
         const created_at = timestamp
         const data = await pool.query(
-            'INSERT INTO users (first_name, last_name, email_address, password, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [first_name, last_name, email_address, hashedPassword, created_at]
+            'INSERT INTO users (first_name, last_name, address, email_address, password, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [first_name, last_name, address, email_address, hashedPassword, created_at]
         )
 
         if (data.rows.length === 0) {
@@ -34,6 +35,7 @@ const registerUser = async (req, res) => {
             id: user.id,
             first_name: user.first_name,
             last_name: user.last_name,
+            address: user.address,
             email_address: user.email_address,
             created_at: user.created_at
         }
