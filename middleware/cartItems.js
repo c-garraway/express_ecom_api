@@ -86,7 +86,6 @@ const deleteCartItem = async (req, res) => {
   try {
     const data = await db.pool.query('DELETE FROM cartItems WHERE id = $1', [id])
     
-    console.log(data)
     if (data.rows.rowCount === 0) {
       return res.status(404).send({message: "Cart Item Not Found"})
     }

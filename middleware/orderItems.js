@@ -51,7 +51,7 @@ const createOrderItem = async (req, res) => {
     }
     const orderItem = data.rows[0]
   
-    res.status(200).send({orderItem})
+    res.status(200).send(orderItem)
 
   } catch (error) {
     res.status(403).send({message: error.detail})

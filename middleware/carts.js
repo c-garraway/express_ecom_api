@@ -53,7 +53,7 @@ const createCart = async (req, res) => {
     }
     const cart = data.rows[0]
     
-    res.status(201).send({cart})
+    res.status(201).send(cart)
 
   } catch (error) {
       res.status(403).send({message: error.detail})
@@ -76,7 +76,7 @@ const updateCartByUserId = async (req, res) => {
 
     const cart = data.rows[0]
        
-    res.status(200).send({cart})       	
+    res.status(200).send(cart)       	
 
   } catch (error) {
       res.status(403).send({message: error.detail})

@@ -49,7 +49,7 @@ const createOrder = async (req, res) => {
     }
     const order = data.rows[0]
     
-    res.status(201).send({order})
+    res.status(201).send(order)
     
   } catch (error) {
     res.status(403).send({message: error.detail})
