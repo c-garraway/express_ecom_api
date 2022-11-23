@@ -10,5 +10,7 @@ orderItemsRouter.get('/user/:id', orderItems.getOrderItemsByUserId)
 orderItemsRouter.post('/', orderItems.createOrderItem)
 orderItemsRouter.put('/:id', orderItems.updateOrderItem)
 orderItemsRouter.delete('/:id', orderItems.deleteOrderItem)
+orderItemsRouter.delete('/order/:id', orderItems.deleteOrderItemsByOrderId)
+
 
 module.exports = orderItemsRouter

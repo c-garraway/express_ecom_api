@@ -87,13 +87,22 @@ const deleteOrderItem = async (req, res) => {
   try {
     const data = await db.pool.query('DELETE FROM orderitems WHERE id = $1', [id])
     
-    /* if (data.rows.length === 0) {
-      return res.status(404).send({message: "Bad Request"})
-    } */
     const orderItem = data.rows[0]
   
-    /* res.status(200).send({orderItem}) */
-    res.status(200).send({message: `Deleted order item id: ${id}`})
+    res.status(200).send({message: `Deleted order item id: ${orderItem}`})
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  } 
+}
+
+
+const deleteOrderItemsByOrderId = async (req, res) => {
+  const order_id = parseInt(req.params.id)
+
+  try {
+    const data = await db.pool.query('DELETE FROM orderitems WHERE order_id = $1', [order_id])
+  
+    res.status(200).send({message: `Deleted order items for order id: ${order_id}`})
   } catch (error) {
     res.status(403).send({message: error.detail})
   } 
@@ -104,5 +113,6 @@ module.exports = {
   getOrderItemsByUserId,
   createOrderItem,
   updateOrderItem,
-  deleteOrderItem
+  deleteOrderItem,
+  deleteOrderItemsByOrderId
 }

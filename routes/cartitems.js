@@ -10,5 +10,6 @@ cartItemsRouter.get('/user/:id', cartItems.getCartItemsByUserId)
 cartItemsRouter.post('/', cartItems.createCartItem)
 cartItemsRouter.put('/:id', cartItems.updateCartItem)
 cartItemsRouter.delete('/:id', cartItems.deleteCartItem)
+cartItemsRouter.delete('/cart/:id', cartItems.deleteCartItemsByCartId)
 
 module.exports = cartItemsRouter

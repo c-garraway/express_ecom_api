@@ -98,10 +98,28 @@ const deleteCartItem = async (req, res) => {
   }
 }
 
+const deleteCartItemsByCartId = async (req, res) => {
+  const cart_id = parseInt(req.params.id)
+
+  try {
+    const data = await db.pool.query('DELETE FROM cartItems WHERE cart_id = $1', [cart_id])
+    
+    /* if (data.rows.rowCount === 0) {
+      return res.status(404).send({message: "Cart Items Not Found"})
+    } */
+
+    res.status(200).send({message: `Cart items deleted for cartID: ${cart_id}`})
+
+  } catch (error) {
+    res.status(403).send({message: error.detail})
+  }
+}
+
 module.exports = {
   getCartItems,
   getCartItemsByUserId,
   createCartItem,
   updateCartItem,
-  deleteCartItem
+  deleteCartItem,
+  deleteCartItemsByCartId
 }
