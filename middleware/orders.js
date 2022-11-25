@@ -58,20 +58,23 @@ const createOrder = async (req, res) => {
 
 const updateOrderByUserId = async (req, res) => {
   const user_id = parseInt(req.params.id)
+  const {total, tax, grand_total} = req.body
   const modified_at = ts.timestamp
+  
 
   try {
     const data = await db.pool.query(
-      'UPDATE orders SET total = ( SELECT ROUND(SUM(products.price), 2)FROM users, orders, orderitems, products WHERE users.id = orders.user_id AND orders.id = orderitems.order_id AND products.id = orderitems.product_id AND users.id = $1), tax = ROUND(total * .13, 2), grand_total = total + tax + shipping, modified_at = $2 WHERE orders.user_id = $1 RETURNING *',
-      [user_id, modified_at]
+      'UPDATE orders SET total = $1, tax = $2, grand_total = $3, modified_at = $4 WHERE orders.user_id = $5 RETURNING *',
+      [total, tax, grand_total, modified_at, user_id]
     )
+   
     if (data.rows.length === 0) {
       return res.status(400).send({message: "Order Not Found"})
     }
 
     const order = data.rows[0]
        
-    res.status(200).send({order})  
+    res.status(200).send(order)  
  
   } catch (error) {
     res.status(403).send({message: error.detail})

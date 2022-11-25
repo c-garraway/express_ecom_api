@@ -49,7 +49,7 @@ const createCartItem = async (req, res) => {
     }
     const cartItem = data.rows[0]
     
-    res.status(201).send({cartItem})
+    res.status(201).send(cartItem)
     
 
   } catch (error) {
