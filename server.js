@@ -35,7 +35,13 @@ const orderItemsRouter = require('./routes/orderitems')
 app.use('/orderitems', orderItemsRouter)
 
 app.get('/', (req, res) =>{
-    res.send('ecom backend root')
+    try {
+        res.send('ecom backend root')
+    } catch (error) {
+        res.status(403).send({message: error.detail})
+        
+    }
+    
 })
 
 const port = 4000
