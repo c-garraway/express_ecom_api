@@ -100,10 +100,16 @@ const logoutUser = async (req, res) => {
 }
 
 const fetchUser = async (req, res) => {
-    if (req.sessionID && req.session.user) {
-        res.status(200)
-        return res.json({ user: req.session.user })
+    try {
+        if (req.sessionID && req.session.user) {
+            res.status(200)
+            return res.json({ user: req.session.user })
+        }
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send({message: "Internal Server Error"})
     }
+    
     return res.status(500).send({message: "Internal Server Error"})
 }
 
