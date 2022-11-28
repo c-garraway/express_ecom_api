@@ -1,8 +1,9 @@
+"use strict"
 const express = require('express');
 const user = require('../middleware/users')
 const { ensureAuthentication } = require('../middleware/utilities')
 
-usersRouter = express.Router()
+const usersRouter = express.Router()
 
 // users CRUD
 usersRouter.post('/logout', user.logoutUser)

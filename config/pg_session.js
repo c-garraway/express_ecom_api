@@ -1,3 +1,4 @@
+"use strict"
 const session = require('express-session')
 const {pool, conObject} = require('./database')
 

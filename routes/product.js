@@ -1,7 +1,8 @@
+"use strict"
 const express = require('express');
 const product = require('../middleware/products')
 
-productRouter = express.Router()
+const productRouter = express.Router()
 
 // product CRUD
 productRouter.get('/', product.getProducts)

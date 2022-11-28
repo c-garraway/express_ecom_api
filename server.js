@@ -1,3 +1,4 @@
+"use strict"
 require('dotenv').config()
 const morgan = require('morgan')
 const express = require('express')
@@ -35,13 +36,7 @@ const orderItemsRouter = require('./routes/orderitems')
 app.use('/orderitems', orderItemsRouter)
 
 app.get('/', (req, res) =>{
-    try {
-        res.send('ecom backend root')
-    } catch (error) {
-        res.status(403).send({message: error.detail})
-        
-    }
-    
+        res.send('ecom backend root')    
 })
 
 const port = 4000

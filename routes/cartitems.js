@@ -1,8 +1,9 @@
+"use strict"
 const express = require('express');
 const cartItems = require('../middleware/cartitems')
 const { ensureAuthentication } = require('../middleware/utilities')
 
-cartItemsRouter = express.Router()
+const cartItemsRouter = express.Router()
 
 // cartItems CRUD
 /* cartItemsRouter.get('/', cartItems.getCartItems) */

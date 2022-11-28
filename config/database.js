@@ -1,4 +1,4 @@
-require('dotenv').config()
+"use strict"
 
 // db pool config
 const Pool = require('pg').Pool

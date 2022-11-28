@@ -1,3 +1,4 @@
+"use strict"
 const { pool } = require('../config/database')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
