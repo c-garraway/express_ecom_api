@@ -1,3 +1,5 @@
 /node_modules
 /testing
 .env
+.env local
+.env cloud
