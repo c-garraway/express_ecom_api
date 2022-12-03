@@ -1,19 +1,19 @@
 "use strict"
 const session = require('express-session')
-//const {pool, conObject} = require('./database')
+const {pool, conObject} = require('./database')
 
 module.exports = (app) => {
 // pg init
-//pool.connect()
+pool.connect()
 
 // session store and session config
-/* const store = new (require('connect-pg-simple')(session))({
+const store = new (require('connect-pg-simple')(session))({
     conObject,
-}) */
+})
 
 app.use(
     session({
-        //store: store,
+        store: store,
         secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
         resave: false,
