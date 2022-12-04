@@ -19,8 +19,8 @@ app.use(
         resave: false,
         cookie: {
             secure: false,
-            //httpOnly: false,
-            //sameSite: false,
+            httpOnly: false,
+            sameSite: false,
             maxAge: 1000 * 60 * 60 * 24,
         },
     })
