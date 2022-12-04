@@ -17,6 +17,7 @@ const getOrderItems = async (req, res) => {
     /* res.status(200).json(results.rows) */
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
   
@@ -36,6 +37,7 @@ const getOrderItemsByUserId = async (req, res) => {
     res.status(200).send(orderItems)
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   } 
 }
@@ -55,6 +57,7 @@ const createOrderItem = async (req, res) => {
     res.status(200).send(orderItem)
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -78,6 +81,7 @@ const updateOrderItem = async (req, res) => {
       res.status(200).send({orderItem})
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -92,6 +96,7 @@ const deleteOrderItem = async (req, res) => {
   
     res.status(200).send({message: `Deleted order item id: ${orderItem}`})
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   } 
 }
@@ -105,6 +110,7 @@ const deleteOrderItemsByOrderId = async (req, res) => {
   
     res.status(200).send({message: `Deleted order items for order id: ${order_id}`})
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   } 
 }

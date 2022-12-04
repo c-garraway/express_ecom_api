@@ -15,6 +15,7 @@ const getProducts = async (req, res) => {
     //res.status(200).json(results.rows)
     
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -31,6 +32,7 @@ const getProductById = async (req, res) => {
     //res.status(200).json(results.rows)
       
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -49,6 +51,7 @@ const createProduct = async (req, res) => {
     res.status(201).send(product)   
    
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }  
 }
@@ -73,6 +76,7 @@ const updateProduct = async (req, res) => {
     //res.status(200).send(`Product modified with ID: ${results.rows[0].id}`)         	
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
     
   }
@@ -92,6 +96,7 @@ const deleteProduct = async (req, res) => {
   res.status(200).send(`Product deleted: ${product}`)
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
     
   }

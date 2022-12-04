@@ -16,7 +16,8 @@ const getCarts = async (req, res) => {
     res.status(200).send({carts})
     
   } catch (error) {
-      res.status(403).send({message: error.detail})
+    console.error(error)
+    res.status(403).send({message: error.detail})
   }
 }
 
@@ -34,7 +35,8 @@ const getCartByUserId = async (req, res) => {
     res.status(200).send(cart)
       
   } catch (error) {
-      res.status(403).send({message: error.detail})
+    console.error(error)
+    res.status(403).send({message: error.detail})
   }
       
 }
@@ -57,7 +59,8 @@ const createCart = async (req, res) => {
     res.status(201).send(cart)
 
   } catch (error) {
-      res.status(403).send({message: error.detail})
+    console.error(error)
+    res.status(403).send({message: error.detail})
   }
 }
 
@@ -81,7 +84,8 @@ const updateCartByUserId = async (req, res) => {
     res.status(200).send(cart)       	
 
   } catch (error) {
-      res.status(403).send({message: error.detail})
+    console.error(error)
+    res.status(403).send({message: error.detail})
   }
 }
 
@@ -99,7 +103,8 @@ const deleteCart = async (req, res) => {
     res.status(200).send(`Cart deleted: ${cart}`)
     
   } catch (error) {
-      res.status(403).send({message: error.detail})
+    console.error(error)
+    res.status(403).send({message: error.detail})
   }
 }
 

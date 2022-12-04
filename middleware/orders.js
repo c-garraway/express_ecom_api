@@ -15,6 +15,7 @@ const getOrders = async (req, res) => {
     res.status(200).send({orders})
     
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -34,6 +35,7 @@ const getOrderByUserId = async (req, res) => {
     res.status(200).send(order)
 
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }    
 }
@@ -53,6 +55,7 @@ const createOrder = async (req, res) => {
     res.status(201).send(order)
     
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -78,6 +81,7 @@ const updateOrderByUserId = async (req, res) => {
     res.status(200).send(order)  
  
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
 }
@@ -96,6 +100,7 @@ const deleteOrder = async (req, res) => {
     res.status(200).send(`Order deleted: ${order}`)
     
   } catch (error) {
+    console.error(error)
     res.status(403).send({message: error.detail})
   }
   

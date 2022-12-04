@@ -44,7 +44,7 @@ const registerUser = async (req, res) => {
         res.status(200)
         return res.json(req.session.user )
     } catch (e) {
-        
+        console.error(e)
         return res.status(403).send({message: e.detail})
     }
 }
