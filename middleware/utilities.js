@@ -22,5 +22,5 @@ const timestamp = year + "-" + month + "-" + date + "T" + hours + ":" + minutes 
 
 module.exports = {
     timestamp,
-    ensureAuthentication
+    /* ensureAuthentication */
 }
