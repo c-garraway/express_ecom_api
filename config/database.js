@@ -2,12 +2,11 @@
 
 // db pool config
 const Pool = require('pg').Pool
+
+const connectionString = process.env.CONNECTION_STRING
+
 const conObject = {
-    user: process.env.USER,
-    host: process.env.HOST,
-    database: process.env.DATABASE,
-    password: process.env.PASSWORD,
-    port: process.env.PORT,
+    connectionString,
     ssl: { rejectUnauthorized: false }
 }
 
