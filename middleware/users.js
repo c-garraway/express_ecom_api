@@ -7,17 +7,17 @@ const { timestamp } = require('./utilities')
 const registerUser = async (req, res) => {
     const { first_name, last_name, address, email_address, password } = req.body
 
-    if (
-        first_name == null ||
-        last_name == null ||
-        address == null ||
-        email_address == null ||
-        password == null
-    ) {
-        return res.status(400).send({message: "Bad request"})
-    }
-
     try {
+        if (
+            first_name == null ||
+            last_name == null ||
+            address == null ||
+            email_address == null ||
+            password == null
+        ) {
+            return res.status(400).send({message: "Bad request"})
+        }
+
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(req.body.password, salt)
         const created_at = timestamp
@@ -52,11 +52,10 @@ const registerUser = async (req, res) => {
 const loginUser =  async (req, res) => {
     const { email_address, password } = req.body
 
-    if (email_address == null || password == null) {
-        return res.status(401).send({message: "Invalid credentials"})
-    }
-
     try {
+        if (email_address == null || password == null) {
+            return res.status(401).send({message: "Invalid credentials"})
+        }
         const data = await pool.query(
             'SELECT * FROM users WHERE email_address = $1',
             [email_address]

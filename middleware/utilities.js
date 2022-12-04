@@ -12,13 +12,13 @@ let seconds = date_ob.getSeconds()
 let milliseconds = date_ob.getMilliseconds()
 const timestamp = year + "-" + month + "-" + date + "T" + hours + ":" + minutes + ":" + seconds/*  + ":" + milliseconds */
 
-const ensureAuthentication = (req, res, next) => {
+/* const ensureAuthentication = (req, res, next) => {
     if (req.session.authenticated) {
         return next();
     } else {
         res.status(403).json({ message: "You're not authorized to view this page" });
     }
-}
+} */
 
 module.exports = {
     timestamp,
