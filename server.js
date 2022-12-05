@@ -39,7 +39,7 @@ app.get('/', (req, res) =>{
         res.send('ecom backend root')    
 })
 
-const port = 4000
+const port = 10000
 app.listen(port, () => {
     console.log(`App started on port ${port}`)
 })
