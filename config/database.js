@@ -13,7 +13,7 @@ const connectionString = process.env.CONNECTION_STRING
 
 const conObject = {
     connectionString,
-    ssl: { rejectUnauthorized: false }
+    //ssl: { rejectUnauthorized: false }
 }
 
 const pool = new Pool(conObject)
